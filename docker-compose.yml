@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  myportal: # container name
+    build: .
+    volumes:
+      - .:/myportaldata
+    ports:
+      - 8000:8000
+    image: myportal:django #image name
+    container_name: myportal_container
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+  db:
+    image: postgres
+    volumes:
+      - ./myportaldata/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+#      - DB_HOST=localhost
+    ports:
+      - 0.0.0.0:5000:5432
+    container_name: postgres
+volumes:
+  myportaldata:
+#    driver: local
